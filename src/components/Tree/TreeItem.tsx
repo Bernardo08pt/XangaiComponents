@@ -1,24 +1,36 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, memo } from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
 import { TreeNode } from './types';
 
-interface TreeItemProps {
+interface ITreeItemProps {
     data: TreeNode; 
+    draggedItem?: TreeNode;
+    onDrag?: (draggedItem: TreeNode) => void;
 }
 
-const TreeItem: React.FC<TreeItemProps> = ({
-    data
+const TreeItem: React.FC<ITreeItemProps> = memo(({
+    data,
+    draggedItem,
+    onDrag
 }) => {
     const [expanded, setExpanded] = useState(false);
-    const { value, children } = data;
+    const [draggedOver, setDraggedOver] = useState(false);
+
+    const { id, value, children } = data;
 
     return (
         <div className={"tree-item"}>
             <div 
-                className={"tree-item-header"}
-                onClick={ () => setExpanded(!expanded) }
+                className={`tree-item-header ${draggedOver ? "tree-item-header--dragged-over" : ""}`}
+                draggable
+                onDragStart={() => onDrag && onDrag(data)}
+                onDragOver={() => setDraggedOver(!!(draggedItem && draggedItem.id !== id))}
+                onDragLeave={() => setDraggedOver(false)}
+                onClick={() => setExpanded(!expanded)}
             >
                 { children && 
                     <FontAwesomeIcon 
@@ -36,12 +48,14 @@ const TreeItem: React.FC<TreeItemProps> = ({
                         <TreeItem 
                             key={`TreeNode_${treeNode.id}`}
                             data={treeNode} 
+                            draggedItem={draggedItem}
+                            onDrag={onDrag}
                         />) 
                     }
                 </div>
             }
         </div>
     );
-}
+});
 
 export default TreeItem;
