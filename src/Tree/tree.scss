@@ -1,0 +1,14 @@
+.tree {
+  &-item {
+    &-header {
+      cursor: pointer;
+
+      &__icon {
+        margin-right: 5px;
+      }
+    }
+    &-children {
+      margin-left: 10px;
+    }
+  }
+}
