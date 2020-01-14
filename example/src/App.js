@@ -1,13 +1,57 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-import ExampleComponent from 'xangai'
+import { Tree } from 'xangai'
 
-export default class App extends Component {
-  render () {
+const exampleData = [
+  {
+    id: "1",
+    value: "Root Directory 1",
+    children: [
+      {
+        id: "1.1",
+        value: "Root Directory 1 Child 1",
+        children: [
+          {
+            id: "1.1.1",
+            value: "Root Directory 1 Child 1 Child 1",
+            children: [
+              {
+                id: "1.1.1.1",
+                value: "Root Directory 1 Child 1 Child 1 Child 1",
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "2",
+    value: "Root Directory 2"
+  },
+  {
+    id: "3",
+    value: "Root Directory 3"
+  },
+  {
+    id: "4",
+    value: "Root Directory 4"
+  },
+  {
+    id: "5",
+    value: "Root Directory 5"
+  }
+]
+
+const App = () => {
+  
     return (
       <div>
-        <ExampleComponent text='Modern React component module' />
+        <Tree
+          data={exampleData}
+        />
       </div>
-    )
-  }
+    ) 
 }
+
+export default App;
