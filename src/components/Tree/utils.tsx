@@ -15,8 +15,13 @@ export const moveTreeNode = (nodeList: Array<TreeNode>, itemToMove: TreeNode, pa
             }
         });
 
-export const isChildren = (parentNode: TreeNode, childrenId: string) : boolean => 
+export const removeTreeNode = (nodeList: Array<TreeNode>, nodeId: string): Array<TreeNode> => 
+    nodeList
+        .filter(item => item.id !== nodeId)
+        .map(item =>  item.children ? {...item, children: removeTreeNode(item.children, nodeId) } : item );
+
+export const isAChildren = (parentNode: TreeNode, childrenId: string) : boolean => 
     !!parentNode.children &&
     parentNode.children.some(item => 
-        item.id === childrenId || isChildren(item, childrenId) 
+        item.id === childrenId || isAChildren(item, childrenId) 
     );

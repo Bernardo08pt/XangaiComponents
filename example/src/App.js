@@ -10,13 +10,16 @@ const exampleData = [
       {
         id: "1.1",
         value: "Root Directory 1 Child 1",
+        parentId: "1",
         children: [
           {
             id: "1.1.1",
             value: "Root Directory 1 Child 1 Child 1",
+            parentId: "1.1",
             children: [
               {
                 id: "1.1.1.1",
+                parentId: "1.1.1",
                 value: "Root Directory 1 Child 1 Child 1 Child 1",
               }
             ]
@@ -46,7 +49,7 @@ const exampleData = [
 const App = () => {
   
     return (
-      <div>
+      <div style={{height: "100vh", width: "400px"}}>
         <Tree
           data={exampleData}
         />
