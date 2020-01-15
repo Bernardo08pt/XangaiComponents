@@ -10,12 +10,14 @@ interface ITreeItemProps {
     data: TreeNode; 
     draggedItem?: TreeNode;
     onDrag?: (draggedItem: TreeNode) => void;
+    onDrop?: (droppedItem: TreeNode) => void;
 }
 
 const TreeItem: React.FC<ITreeItemProps> = memo(({
     data,
     draggedItem,
-    onDrag
+    onDrag,
+    onDrop
 }) => {
     const [expanded, setExpanded] = useState(false);
     const [draggedOver, setDraggedOver] = useState(false);
@@ -23,16 +25,24 @@ const TreeItem: React.FC<ITreeItemProps> = memo(({
     const { id, value, children } = data;
 
     return (
-        <div className={"tree-item"}>
+        <div className={"tree-item"} >
             <div 
                 className={`tree-item-header ${draggedOver ? "tree-item-header--dragged-over" : ""}`}
                 draggable
                 onDragStart={() => onDrag && onDrag(data)}
-                onDragOver={() => setDraggedOver(!!(draggedItem && draggedItem.id !== id))}
+                onDragOver={e => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setDraggedOver(!!(draggedItem && draggedItem.id !== id))
+                }}
                 onDragLeave={() => setDraggedOver(false)}
+                onDrop={() => {
+                    setDraggedOver(false);
+                    onDrop && onDrop(data);
+                }}
                 onClick={() => setExpanded(!expanded)}
             >
-                { children && 
+                { children && children.length > 0 && 
                     <FontAwesomeIcon 
                         className={"tree-item-header__icon"}
                         icon={ expanded ? faChevronDown : faChevronRight } 
@@ -50,6 +60,7 @@ const TreeItem: React.FC<ITreeItemProps> = memo(({
                             data={treeNode} 
                             draggedItem={draggedItem}
                             onDrag={onDrag}
+                            onDrop={onDrop}
                         />) 
                     }
                 </div>

@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import { TreeNode } from './types';
 import TreeItem from './TreeItem';
 import "./tree.scss";
+import { moveTreeNode, isChildren } from './utils';
 
 export interface ITreeProps {
     data: Array<TreeNode>; 
@@ -11,17 +12,23 @@ export interface ITreeProps {
 const Tree: React.FC<ITreeProps> = ({
     data
 }) => {
-    const [itemList] = useState(data);
+    const [itemList, setItemList] = useState(data);
     const [draggedItem, setDraggedItem] = useState();
 
     const handleDragItem = useCallback((draggedItem: TreeNode) => 
         setDraggedItem(draggedItem) 
-    ,[setDraggedItem]);
+    , [setDraggedItem]);
 
-    // const handleDropItem = useCallback((draggedItem: TreeNode, droppedItem: TreeNode) => {
+    const handleDropItem = useCallback((droppedItem: TreeNode) => {
+        const { id: draggedItemId } = draggedItem;
+        const { id: droppedItemId } = droppedItem;
 
-    // }
-    // ,[setDraggedItem]);
+        if (draggedItemId === droppedItemId || isChildren(draggedItem, droppedItemId)) {
+            return;
+        }
+
+        setItemList(moveTreeNode(itemList, draggedItem, droppedItem.id));
+    }, [itemList, draggedItem, setItemList]);
 
     return (
         <div className={"tree"}>
@@ -31,6 +38,7 @@ const Tree: React.FC<ITreeProps> = ({
                     data={treeNode}
                     draggedItem={draggedItem}
                     onDrag={handleDragItem}
+                    onDrop={handleDropItem}
                 />) 
             }
         </div>
