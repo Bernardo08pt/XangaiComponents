@@ -1,0 +1,18 @@
+.tree {
+  &-item {
+    &-header {
+      cursor: pointer;
+
+      &--dragged-over {
+        background-color: lightblue;
+      }
+
+      &__icon {
+        margin-right: 5px;
+      }
+    }
+    &-children {
+      margin-left: 10px;
+    }
+  }
+}
