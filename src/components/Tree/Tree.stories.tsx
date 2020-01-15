@@ -1,5 +1,8 @@
 
-export const exampleData = [
+import * as React from 'react';
+import Tree from "./Tree" 
+  
+const exampleData = [
     {
       id: "1",
       value: "Root Directory 1",
@@ -40,13 +43,14 @@ export const exampleData = [
     }
   ]
 
-  import { storiesOf } from '@storybook/react';
-  import * as React from 'react';
-  import Tree from "./Tree" 
+
+  export default {
+    title: 'Tree View',
+    parameters: {
+      info: { inline: true },
+    },
+  };
   
-
-
-  storiesOf("Tree", module)
-    .add("with text", () => (
-      <Tree data={exampleData} />
-    ));
+  export const Draggable = () => 
+    <Tree data={exampleData} />
+  ;
