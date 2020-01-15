@@ -33,7 +33,12 @@ const TreeItem: React.FC<ITreeItemProps> = memo(({
                 onDragOver={e => {
                     e.stopPropagation();
                     e.preventDefault();
-                    setDraggedOver(!!(draggedItem && draggedItem.id !== id))
+
+                    const isDifferentItem = !!(draggedItem && draggedItem.id !== id);
+                    if (isDifferentItem) {
+                        setDraggedOver(true);
+                        setExpanded(true);
+                    }
                 }}
                 onDragLeave={() => setDraggedOver(false)}
                 onDrop={() => {
